@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "StartAB Dex",
+  "version": "0.7.3",
+  "description": "Quality-of-life Pokédex overlay per StartAB.",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://core.startab.it/season_4/emulator*"
+      ],
+      "js": [
+        "bridge.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://core.startab.it/season_4/emulator*"
+      ],
+      "js": [
+        "main.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ],
+  "host_permissions": [
+    "https://pokeapi.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
