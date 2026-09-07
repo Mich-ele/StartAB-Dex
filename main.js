@@ -1,18 +1,15 @@
 (() => {
   "use strict";
 
-  const BUILD_ID = "0.7.3";
+  const BUILD_ID = "0.7.5";
 
   if (window.__startabDexBuild === BUILD_ID) return;
   window.__startabDexBuild = BUILD_ID;
 
   const isEmulatorRoute = () =>
-    /^\/season_4\/(?:emulator|emulator_play)(?:\/|$)/.test(location.pathname);
-
-  if (!isEmulatorRoute()) {
-    console.debug("[StartAB Dex] inactive on", location.pathname);
-    return;
-  }
+    /(?:^|\/)(?:season_\d+\/)?(?:emulator|emulator_play)(?:\/|$)/i.test(location.pathname) ||
+    !!window.__celarysEmuModule ||
+    !!window.celarysEmuModule;
 
   const PARTY_DELTA = 0x258;
   const PARTY_SIZE = 100;
@@ -64,6 +61,11 @@
   ];
 
   let wasmMemory = null;
+  let coreInstance = null;
+  let coreExports = null;
+  let trackerGetJson = null;
+  let trackerFreeJson = null;
+  let trackerMemory = null;
   let playerBase = null;
   let currentEnemyBase = null;
   let lastEncounterId = null;
@@ -82,10 +84,26 @@
   );
 
   const getViews = () => {
-    if (!wasmMemory?.buffer) return null;
+    const buffers = [];
+    const add = buffer => {
+      if (!(buffer instanceof ArrayBuffer) && !(typeof SharedArrayBuffer !== "undefined" && buffer instanceof SharedArrayBuffer)) return;
+      if (!buffers.includes(buffer)) buffers.push(buffer);
+    };
+
+    add(wasmMemory?.buffer);
+
+    const m = getModule();
+    add(m?.HEAPU8?.buffer);
+    add(m?.HEAP8?.buffer);
+    add(m?.wasmMemory?.buffer);
+    add(m?.memory?.buffer);
+
+    const buffer = buffers.sort((a, b) => b.byteLength - a.byteLength)[0];
+    if (!buffer) return null;
+
     return {
-      u8: new Uint8Array(wasmMemory.buffer),
-      u16: new Uint16Array(wasmMemory.buffer)
+      u8: new Uint8Array(buffer),
+      u16: new Uint16Array(buffer)
     };
   };
 
@@ -201,25 +219,106 @@
     return out;
   };
 
+  let cachedModule = null;
+  let lastModuleScan = 0;
+
+  const validModule = m =>
+    !!m && typeof m === "object" && typeof m.UTF8ToString === "function" &&
+    (typeof m.ccall === "function" || typeof m._celarys_tracker_get_json === "function");
+
   const getModule = () => {
-    const m = window.__celarysEmuModule;
-    return m?.ccall && m?.UTF8ToString ? m : null;
+    const direct = [
+      window.__celarysEmuModule,
+      window.celarysEmuModule,
+      window.Module,
+      cachedModule
+    ];
+
+    for (const m of direct) {
+      if (validModule(m)) {
+        cachedModule = m;
+        return m;
+      }
+    }
+
+    const now = performance.now();
+    if (now - lastModuleScan < 1000) return null;
+    lastModuleScan = now;
+
+    for (const key of Object.getOwnPropertyNames(window)) {
+      if (!/(?:celarys|emu|module)/i.test(key)) continue;
+      try {
+        const m = window[key];
+        if (validModule(m)) {
+          cachedModule = m;
+          window.__celarysEmuModule = m;
+          return m;
+        }
+      } catch {}
+    }
+
+    return null;
+  };
+
+  const readCString = (memory, ptr) => {
+    if (!memory || !ptr) return "";
+    const u8 = new Uint8Array(memory.buffer);
+    let end = ptr >>> 0;
+    const start = end;
+    const limit = Math.min(u8.length, start + 1024 * 1024);
+    while (end < limit && u8[end] !== 0) end++;
+    if (end <= start) return "";
+    return new TextDecoder().decode(u8.subarray(start, end));
   };
 
   const getTracker = () => {
     const m = getModule();
-    if (!m) return null;
 
-    const ptr = m.ccall("celarys_tracker_get_json", "number", [], []);
+    if (m) {
+      let ptr = 0;
+      try {
+        ptr = typeof m._celarys_tracker_get_json === "function"
+          ? m._celarys_tracker_get_json()
+          : m.ccall("celarys_tracker_get_json", "number", [], []);
+      } catch {
+        ptr = 0;
+      }
+
+      if (ptr) {
+        try {
+          const data = JSON.parse(m.UTF8ToString(ptr));
+          window.__startabDexTrackerSource = "module";
+          return data;
+        } catch {} finally {
+          try {
+            if (typeof m._celarys_tracker_free_json === "function") m._celarys_tracker_free_json(ptr);
+            else m.ccall("celarys_tracker_free_json", null, ["number"], [ptr]);
+          } catch {}
+        }
+      }
+    }
+
+    if (!trackerGetJson || !trackerMemory) return null;
+
+    let ptr = 0;
+    try {
+      ptr = trackerGetJson();
+    } catch {
+      return null;
+    }
+
     if (!ptr) return null;
 
     try {
-      return JSON.parse(m.UTF8ToString(ptr));
+      const text = readCString(trackerMemory, Number(ptr));
+      const data = JSON.parse(text);
+      window.__startabDexTrackerSource = "wasm";
+      return data;
     } catch {
       return null;
     } finally {
       try {
-        m.ccall("celarys_tracker_free_json", null, ["number"], [ptr]);
+        if (trackerFreeJson) trackerFreeJson(ptr);
       } catch {}
     }
   };
@@ -586,7 +685,6 @@
     (document.head || document.documentElement).appendChild(style);
     (document.body || document.documentElement).appendChild(box);
     box.style.display = "none";
-    //applySavedOverlay(box);
     makeDraggable(box);
     return box;
   };
@@ -617,6 +715,33 @@
     if (body) body.style.display = "none";
   };
 
+  let seasonSlug = null;
+
+  const getSeasonSlug = () => {
+    if (seasonSlug) return seasonSlug;
+
+    const route = location.pathname.match(/\/(season_\d+)(?:\/|$)/i);
+    if (route) {
+      seasonSlug = route[1].toLowerCase();
+      return seasonSlug;
+    }
+
+    const m = getModule();
+    if (m) {
+      try {
+        const ptr = m.ccall("se_startup_get_patch_path", "number", [], []);
+        const value = ptr ? m.UTF8ToString(ptr) : "";
+        const match = value.match(/\/(season_\d+)\//i);
+        if (match) {
+          seasonSlug = match[1].toLowerCase();
+          return seasonSlug;
+        }
+      } catch {}
+    }
+
+    return "season_4";
+  };
+
   const updateSprite = speciesId => {
     const host = document.getElementById("cws-sprite");
     if (!host) return;
@@ -635,7 +760,7 @@
     const row = Math.floor(id / cols);
     const spr = document.createElement("div");
     spr.className = "cws-sprite-sheet";
-    spr.style.backgroundImage = 'url("/assets/games/season_4/resources/pokemon_icon/pokemon_normal.png")';
+    spr.style.backgroundImage = `url("/assets/games/${getSeasonSlug()}/resources/pokemon_icon/pokemon_normal.png")`;
     spr.style.backgroundSize = `${cols * 100}% ${rows * 100}%`;
     spr.style.backgroundPosition =
       `${col / (cols - 1) * 100}% ${Math.min(row, rows - 1) / (rows - 1) * 100}%`;
@@ -716,18 +841,65 @@
       const exports = instance?.exports;
       if (!exports) return;
 
-      if (exports.Pf instanceof WebAssembly.Memory) {
-        wasmMemory = exports.Pf;
-      } else {
-        for (const value of Object.values(exports)) {
-          if (value instanceof WebAssembly.Memory) {
-            wasmMemory = value;
-            break;
-          }
-        }
+      window.__startabDexInstances ??= [];
+      if (!window.__startabDexInstances.includes(instance)) window.__startabDexInstances.push(instance);
+
+      const memories = Object.values(exports).filter(value => value instanceof WebAssembly.Memory);
+      for (const memory of memories) {
+        if (!wasmMemory || memory.buffer.byteLength > wasmMemory.buffer.byteLength) wasmMemory = memory;
+      }
+
+      const namedMemory = exports.Tf instanceof WebAssembly.Memory
+        ? exports.Tf
+        : exports.Sf instanceof WebAssembly.Memory
+          ? exports.Sf
+          : exports.memory instanceof WebAssembly.Memory
+            ? exports.memory
+            : memories.sort((a, b) => b.buffer.byteLength - a.buffer.byteLength)[0] ?? null;
+
+      const newTrackerAbi = exports.Tf instanceof WebAssembly.Memory && typeof exports.bh === "function" && typeof exports.$g === "function";
+      const oldTrackerAbi = exports.Sf instanceof WebAssembly.Memory && typeof exports.$g === "function" && typeof exports.Zg === "function";
+
+      const getJson = newTrackerAbi
+        ? exports.bh
+        : oldTrackerAbi
+          ? exports.$g
+          : typeof exports.celarys_tracker_get_json === "function"
+            ? exports.celarys_tracker_get_json
+            : typeof exports._celarys_tracker_get_json === "function"
+              ? exports._celarys_tracker_get_json
+              : null;
+
+      const freeJson = newTrackerAbi
+        ? exports.$g
+        : oldTrackerAbi
+          ? exports.Zg
+          : typeof exports.celarys_tracker_free_json === "function"
+            ? exports.celarys_tracker_free_json
+            : typeof exports._celarys_tracker_free_json === "function"
+              ? exports._celarys_tracker_free_json
+              : null;
+
+      if (getJson && namedMemory) {
+        coreInstance = instance;
+        coreExports = exports;
+        trackerGetJson = getJson;
+        trackerFreeJson = freeJson;
+        trackerMemory = namedMemory;
+        wasmMemory = namedMemory;
+        window.__startabDexCoreInstance = coreInstance;
+        window.__startabDexCoreExports = coreExports;
+        window.__startabDexTrackerSource = "wasm-ready";
       }
 
       if (wasmMemory) window.__startabDexMemory = wasmMemory;
+      window.__startabDexInstanceSummary = window.__startabDexInstances.map((x, i) => ({
+        i,
+        memory: Object.values(x.exports).filter(v => v instanceof WebAssembly.Memory).map(v => v.buffer.byteLength),
+        hasTracker: (x.exports.Tf instanceof WebAssembly.Memory && typeof x.exports.bh === "function" && typeof x.exports.$g === "function") || (x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.$g === "function" && typeof x.exports.Zg === "function") || typeof x.exports.celarys_tracker_get_json === "function" || typeof x.exports._celarys_tracker_get_json === "function",
+        trackerAbi: x.exports.Tf instanceof WebAssembly.Memory && typeof x.exports.bh === "function" ? "2026-09" : x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.$g === "function" ? "legacy" : null,
+        keys: Object.keys(x.exports).length
+      }));
     } catch (e) {
       console.warn("[StartAB Dex] captureInstance", e);
     }
@@ -907,7 +1079,7 @@
       const encounterId = `${data.enemy.speciesId}|${data.enemy.level}|${data.seq ?? ""}|${currentEnemyBase ?? ""}`;
       if (encounterId !== lastEncounterId) {
         lastEncounterId = encounterId;
-        console.log("[StartAB Dex]", data.enemy.name, stats);
+        //console.log("[StartAB Dex]", data.enemy.name, stats);
       }
     } catch (e) {
       console.error("[StartAB Dex]", e);
@@ -915,18 +1087,32 @@
     }
   };
 
+  let started = false;
+
   const start = () => {
+    if (started) return;
+    started = true;
     createActiveBadge();
     ensureOverlay();
     showActiveBadge();
     window.__startabDexInterval = setInterval(tick, POLL_MS);
+    console.log("[StartAB Dex] v0.7.5", {path: location.pathname, season: getSeasonSlug()});
+  };
+
+  const maybeStart = () => {
+    if (started || !isEmulatorRoute()) return;
+    if (document.readyState === "loading") return;
+    start();
   };
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start, {once:true});
+    document.addEventListener("DOMContentLoaded", maybeStart, {once:true});
   } else {
-    start();
+    maybeStart();
   }
 
-  console.log("[StartAB Dex] v0.7.3");
+  const routeTimer = setInterval(() => {
+    maybeStart();
+    if (started) clearInterval(routeTimer);
+  }, 500);
 })();
