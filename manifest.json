@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "StartAB Dex",
-  "version": "0.7.9",
+  "version": "0.7.11",
   "description": "Quality-of-life Pokédex overlay per StartAB.",
   "content_scripts": [
     {
