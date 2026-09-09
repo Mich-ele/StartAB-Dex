@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const BUILD_ID = "0.7.14";
+  const BUILD_ID = "0.7.15";
 
   if (window.__startabDexBuild === BUILD_ID) return;
   window.__startabDexBuild = BUILD_ID;
@@ -568,7 +568,7 @@
       left: "10px",
       top: "10px",
       zIndex: "2147483647",
-      width: "min(474px, calc(100vw - 20px))",
+      width: "min(360px, calc(100vw - 20px))",
       height: "auto",
       minWidth: "min(230px, calc(100vw - 8px))",
       minHeight: "260px",
@@ -880,28 +880,44 @@
             ? exports.memory
             : memories.sort((a, b) => b.buffer.byteLength - a.buffer.byteLength)[0] ?? null;
 
-      const newTrackerAbi = exports.Tf instanceof WebAssembly.Memory && typeof exports.bh === "function" && typeof exports.$g === "function";
-      const oldTrackerAbi = exports.Sf instanceof WebAssembly.Memory && typeof exports.$g === "function" && typeof exports.Zg === "function";
+      const currentTrackerAbi =
+        exports.Sf instanceof WebAssembly.Memory &&
+        typeof exports.ah === "function" && exports.ah.length === 0 &&
+        typeof exports._g === "function" && exports._g.length === 1;
 
-      const getJson = newTrackerAbi
-        ? exports.bh
-        : oldTrackerAbi
+      const newTrackerAbi =
+        exports.Tf instanceof WebAssembly.Memory &&
+        typeof exports.bh === "function" && exports.bh.length === 0 &&
+        typeof exports.$g === "function" && exports.$g.length === 1;
+
+      const oldTrackerAbi =
+        exports.Sf instanceof WebAssembly.Memory &&
+        typeof exports.$g === "function" && exports.$g.length === 0 &&
+        typeof exports.Zg === "function" && exports.Zg.length === 1;
+
+      const getJson = currentTrackerAbi
+        ? exports.ah
+        : newTrackerAbi
+          ? exports.bh
+          : oldTrackerAbi
+            ? exports.$g
+            : typeof exports.celarys_tracker_get_json === "function"
+              ? exports.celarys_tracker_get_json
+              : typeof exports._celarys_tracker_get_json === "function"
+                ? exports._celarys_tracker_get_json
+                : null;
+
+      const freeJson = currentTrackerAbi
+        ? exports._g
+        : newTrackerAbi
           ? exports.$g
-          : typeof exports.celarys_tracker_get_json === "function"
-            ? exports.celarys_tracker_get_json
-            : typeof exports._celarys_tracker_get_json === "function"
-              ? exports._celarys_tracker_get_json
-              : null;
-
-      const freeJson = newTrackerAbi
-        ? exports.$g
-        : oldTrackerAbi
-          ? exports.Zg
-          : typeof exports.celarys_tracker_free_json === "function"
-            ? exports.celarys_tracker_free_json
-            : typeof exports._celarys_tracker_free_json === "function"
-              ? exports._celarys_tracker_free_json
-              : null;
+          : oldTrackerAbi
+            ? exports.Zg
+            : typeof exports.celarys_tracker_free_json === "function"
+              ? exports.celarys_tracker_free_json
+              : typeof exports._celarys_tracker_free_json === "function"
+                ? exports._celarys_tracker_free_json
+                : null;
 
       if (getJson && namedMemory) {
         coreInstance = instance;
@@ -919,8 +935,20 @@
       window.__startabDexInstanceSummary = window.__startabDexInstances.map((x, i) => ({
         i,
         memory: Object.values(x.exports).filter(v => v instanceof WebAssembly.Memory).map(v => v.buffer.byteLength),
-        hasTracker: (x.exports.Tf instanceof WebAssembly.Memory && typeof x.exports.bh === "function" && typeof x.exports.$g === "function") || (x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.$g === "function" && typeof x.exports.Zg === "function") || typeof x.exports.celarys_tracker_get_json === "function" || typeof x.exports._celarys_tracker_get_json === "function",
-        trackerAbi: x.exports.Tf instanceof WebAssembly.Memory && typeof x.exports.bh === "function" ? "2026-09" : x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.$g === "function" ? "legacy" : null,
+        hasTracker:
+          (x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.ah === "function" && x.exports.ah.length === 0 && typeof x.exports._g === "function" && x.exports._g.length === 1) ||
+          (x.exports.Tf instanceof WebAssembly.Memory && typeof x.exports.bh === "function" && x.exports.bh.length === 0 && typeof x.exports.$g === "function" && x.exports.$g.length === 1) ||
+          (x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.$g === "function" && x.exports.$g.length === 0 && typeof x.exports.Zg === "function" && x.exports.Zg.length === 1) ||
+          typeof x.exports.celarys_tracker_get_json === "function" ||
+          typeof x.exports._celarys_tracker_get_json === "function",
+        trackerAbi:
+          x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.ah === "function" && x.exports.ah.length === 0 && typeof x.exports._g === "function" && x.exports._g.length === 1
+            ? "2026-09-current"
+            : x.exports.Tf instanceof WebAssembly.Memory && typeof x.exports.bh === "function" && x.exports.bh.length === 0 && typeof x.exports.$g === "function" && x.exports.$g.length === 1
+              ? "2026-09-prev"
+              : x.exports.Sf instanceof WebAssembly.Memory && typeof x.exports.$g === "function" && x.exports.$g.length === 0 && typeof x.exports.Zg === "function" && x.exports.Zg.length === 1
+                ? "legacy"
+                : null,
         keys: Object.keys(x.exports).length
       }));
     } catch (e) {
