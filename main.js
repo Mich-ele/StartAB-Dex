@@ -1,7 +1,7 @@
 (() => {
   "use strict";
 
-  const BUILD_ID = "0.7.11";
+  const BUILD_ID = "0.7.14";
 
   if (window.__startabDexBuild === BUILD_ID) return;
   window.__startabDexBuild = BUILD_ID;
@@ -15,7 +15,7 @@
   const PARTY_SIZE = 100;
   const PARTY_SLOTS = 6;
   const POLL_MS = 250;
-  const STORAGE_KEY = "startab_dex_overlay_v4";
+  const STORAGE_KEY = "startab_dex_overlay_v5";
 
   const MOVE_DB = {"1":{"name":"POUND","category":"Physical"},"2":{"name":"KARATE CHOP","category":"Physical"},"3":{"name":"DOUBLE SLAP","category":"Physical"},"4":{"name":"COMET PUNCH","category":"Physical"},"5":{"name":"MEGA PUNCH","category":"Physical"},"6":{"name":"PAY DAY","category":"Physical"},"7":{"name":"FIRE PUNCH","category":"Physical"},"8":{"name":"ICE PUNCH","category":"Physical"},"9":{"name":"THUNDER PUNCH","category":"Physical"},"10":{"name":"SCRATCH","category":"Physical"},"11":{"name":"VISE GRIP","category":"Physical"},"12":{"name":"GUILLOTINE","category":"Physical"},"13":{"name":"RAZOR WIND","category":"Special"},"14":{"name":"SWORDS DANCE","category":"Status"},"15":{"name":"CUT","category":"Physical"},"16":{"name":"GUST","category":"Special"},"17":{"name":"WING ATTACK","category":"Physical"},"18":{"name":"WHIRLWIND","category":"Status"},"19":{"name":"FLY","category":"Physical"},"20":{"name":"BIND","category":"Physical"},"21":{"name":"SLAM","category":"Physical"},"22":{"name":"VINE WHIP","category":"Physical"},"23":{"name":"STOMP","category":"Physical"},"24":{"name":"DOUBLE KICK","category":"Physical"},"25":{"name":"MEGA KICK","category":"Physical"},"26":{"name":"JUMP KICK","category":"Physical"},"27":{"name":"ROLLING KICK","category":"Physical"},"28":{"name":"SAND ATTACK","category":"Status"},"29":{"name":"HEADBUTT","category":"Physical"},"30":{"name":"HORN ATTACK","category":"Physical"},"31":{"name":"FURY ATTACK","category":"Physical"},"32":{"name":"HORN DRILL","category":"Physical"},"33":{"name":"TACKLE","category":"Physical"},"34":{"name":"BODY SLAM","category":"Physical"},"35":{"name":"WRAP","category":"Physical"},"36":{"name":"TAKE DOWN","category":"Physical"},"37":{"name":"THRASH","category":"Physical"},"38":{"name":"DOUBLE-EDGE","category":"Physical"},"39":{"name":"TAIL WHIP","category":"Status"},"40":{"name":"POISON STING","category":"Physical"},"41":{"name":"TWINEEDLE","category":"Physical"},"42":{"name":"PIN MISSILE","category":"Physical"},"43":{"name":"LEER","category":"Status"},"44":{"name":"BITE","category":"Physical"},"45":{"name":"GROWL","category":"Status"},"46":{"name":"ROAR","category":"Status"},"47":{"name":"SING","category":"Status"},"48":{"name":"SUPERSONIC","category":"Status"},"49":{"name":"SONIC BOOM","category":"Special"},"50":{"name":"DISABLE","category":"Status"},"51":{"name":"ACID","category":"Special"},"52":{"name":"EMBER","category":"Special"},"53":{"name":"FLAMETHROWER","category":"Special"},"54":{"name":"MIST","category":"Status"},"55":{"name":"WATER GUN","category":"Special"},"56":{"name":"HYDRO PUMP","category":"Special"},"57":{"name":"SURF","category":"Special"},"58":{"name":"ICE BEAM","category":"Special"},"59":{"name":"BLIZZARD","category":"Special"},"60":{"name":"PSYBEAM","category":"Special"},"61":{"name":"BUBBLE BEAM","category":"Special"},"62":{"name":"AURORA BEAM","category":"Special"},"63":{"name":"HYPER BEAM","category":"Special"},"64":{"name":"PECK","category":"Physical"},"65":{"name":"DRILL PECK","category":"Physical"},"66":{"name":"SUBMISSION","category":"Physical"},"67":{"name":"LOW KICK","category":"Physical"},"68":{"name":"COUNTER","category":"Physical"},"69":{"name":"SEISMIC TOSS","category":"Physical"},"70":{"name":"STRENGTH","category":"Physical"},"71":{"name":"ABSORB","category":"Special"},"72":{"name":"MEGA DRAIN","category":"Special"},"73":{"name":"LEECH SEED","category":"Status"},"74":{"name":"GROWTH","category":"Status"},"75":{"name":"RAZOR LEAF","category":"Physical"},"76":{"name":"SOLAR BEAM","category":"Special"},"77":{"name":"POISON POWDER","category":"Status"},"78":{"name":"STUN SPORE","category":"Status"},"79":{"name":"SLEEP POWDER","category":"Status"},"80":{"name":"PETAL DANCE","category":"Special"},"81":{"name":"STRING SHOT","category":"Status"},"82":{"name":"DRAGON RAGE","category":"Special"},"83":{"name":"FIRE SPIN","category":"Special"},"84":{"name":"THUNDER SHOCK","category":"Special"},"85":{"name":"THUNDERBOLT","category":"Special"},"86":{"name":"THUNDER WAVE","category":"Status"},"87":{"name":"THUNDER","category":"Special"},"88":{"name":"ROCK THROW","category":"Physical"},"89":{"name":"EARTHQUAKE","category":"Physical"},"90":{"name":"FISSURE","category":"Physical"},"91":{"name":"DIG","category":"Physical"},"92":{"name":"TOXIC","category":"Status"},"93":{"name":"CONFUSION","category":"Special"},"94":{"name":"PSYCHIC","category":"Special"},"95":{"name":"HYPNOSIS","category":"Status"},"96":{"name":"MEDITATE","category":"Status"},"97":{"name":"AGILITY","category":"Status"},"98":{"name":"QUICK ATTACK","category":"Physical"},"99":{"name":"RAGE","category":"Physical"},"100":{"name":"TELEPORT","category":"Status"},"101":{"name":"NIGHT SHADE","category":"Special"},"102":{"name":"MIMIC","category":"Status"},"103":{"name":"SCREECH","category":"Status"},"104":{"name":"DOUBLE TEAM","category":"Status"},"105":{"name":"RECOVER","category":"Status"},"106":{"name":"HARDEN","category":"Status"},"107":{"name":"MINIMIZE","category":"Status"},"108":{"name":"SMOKESCREEN","category":"Status"},"109":{"name":"CONFUSE RAY","category":"Status"},"110":{"name":"WITHDRAW","category":"Status"},"111":{"name":"DEFENSE CURL","category":"Status"},"112":{"name":"BARRIER","category":"Status"},"113":{"name":"LIGHT SCREEN","category":"Status"},"114":{"name":"HAZE","category":"Status"},"115":{"name":"REFLECT","category":"Status"},"116":{"name":"FOCUS ENERGY","category":"Status"},"117":{"name":"BIDE","category":"Physical"},"118":{"name":"METRONOME","category":"Status"},"119":{"name":"MIRROR MOVE","category":"Status"},"120":{"name":"SELF-DESTRUCT","category":"Physical"},"121":{"name":"EGG BOMB","category":"Physical"},"122":{"name":"LICK","category":"Physical"},"123":{"name":"SMOG","category":"Special"},"124":{"name":"SLUDGE","category":"Special"},"125":{"name":"BONE CLUB","category":"Physical"},"126":{"name":"FIRE BLAST","category":"Special"},"127":{"name":"WATERFALL","category":"Physical"},"128":{"name":"CLAMP","category":"Physical"},"129":{"name":"SWIFT","category":"Special"},"130":{"name":"SKULL BASH","category":"Physical"},"131":{"name":"SPIKE CANNON","category":"Physical"},"132":{"name":"CONSTRICT","category":"Physical"},"133":{"name":"AMNESIA","category":"Status"},"134":{"name":"KINESIS","category":"Status"},"135":{"name":"SOFT-BOILED","category":"Status"},"136":{"name":"HIGH JUMP KICK","category":"Physical"},"137":{"name":"GLARE","category":"Status"},"138":{"name":"DREAM EATER","category":"Special"},"139":{"name":"POISON GAS","category":"Status"},"140":{"name":"BARRAGE","category":"Physical"},"141":{"name":"LEECH LIFE","category":"Physical"},"142":{"name":"LOVELY KISS","category":"Status"},"143":{"name":"SKY ATTACK","category":"Physical"},"144":{"name":"TRANSFORM","category":"Status"},"145":{"name":"BUBBLE","category":"Special"},"146":{"name":"DIZZY PUNCH","category":"Physical"},"147":{"name":"SPORE","category":"Status"},"148":{"name":"FLASH","category":"Status"},"149":{"name":"PSYWAVE","category":"Special"},"150":{"name":"SPLASH","category":"Status"},"151":{"name":"ACID ARMOR","category":"Status"},"152":{"name":"CRABHAMMER","category":"Physical"},"153":{"name":"EXPLOSION","category":"Physical"},"154":{"name":"FURY SWIPES","category":"Physical"},"155":{"name":"BONEMERANG","category":"Physical"},"156":{"name":"REST","category":"Status"},"157":{"name":"ROCK SLIDE","category":"Physical"},"158":{"name":"HYPER FANG","category":"Physical"},"159":{"name":"SHARPEN","category":"Status"},"160":{"name":"CONVERSION","category":"Status"},"161":{"name":"TRI ATTACK","category":"Special"},"162":{"name":"SUPER FANG","category":"Physical"},"163":{"name":"SLASH","category":"Physical"},"164":{"name":"SUBSTITUTE","category":"Status"},"165":{"name":"STRUGGLE","category":"Physical"},"167":{"name":"TRIPLE KICK","category":"Physical"},"168":{"name":"THIEF","category":"Physical"},"169":{"name":"SPIDER WEB","category":"Status"},"170":{"name":"MIND READER","category":"Status"},"171":{"name":"NIGHTMARE","category":"Status"},"172":{"name":"FLAME WHEEL","category":"Physical"},"173":{"name":"SNORE","category":"Special"},"174":{"name":"CURSE","category":"Status"},"175":{"name":"FLAIL","category":"Physical"},"176":{"name":"CONVERSION 2","category":"Status"},"177":{"name":"AEROBLAST","category":"Special"},"178":{"name":"COTTON SPORE","category":"Status"},"179":{"name":"REVERSAL","category":"Physical"},"180":{"name":"SPITE","category":"Status"},"181":{"name":"POWDER SNOW","category":"Special"},"182":{"name":"PROTECT","category":"Status"},"183":{"name":"MACH PUNCH","category":"Physical"},"184":{"name":"SCARY FACE","category":"Status"},"185":{"name":"FEINT ATTACK","category":"Physical"},"186":{"name":"SWEET KISS","category":"Status"},"187":{"name":"BELLY DRUM","category":"Status"},"188":{"name":"SLUDGE BOMB","category":"Special"},"189":{"name":"MUD-SLAP","category":"Special"},"190":{"name":"OCTAZOOKA","category":"Special"},"191":{"name":"SPIKES","category":"Status"},"192":{"name":"ZAP CANNON","category":"Special"},"193":{"name":"FORESIGHT","category":"Status"},"194":{"name":"DESTINY BOND","category":"Status"},"195":{"name":"PERISH SONG","category":"Status"},"196":{"name":"ICY WIND","category":"Special"},"197":{"name":"DETECT","category":"Status"},"198":{"name":"BONE RUSH","category":"Physical"},"199":{"name":"LOCK-ON","category":"Status"},"200":{"name":"OUTRAGE","category":"Physical"},"201":{"name":"SANDSTORM","category":"Status"},"202":{"name":"GIGA DRAIN","category":"Special"},"203":{"name":"ENDURE","category":"Status"},"204":{"name":"CHARM","category":"Status"},"205":{"name":"ROLLOUT","category":"Physical"},"206":{"name":"FALSE SWIPE","category":"Physical"},"207":{"name":"SWAGGER","category":"Status"},"208":{"name":"MILK DRINK","category":"Status"},"209":{"name":"SPARK","category":"Physical"},"210":{"name":"FURY CUTTER","category":"Physical"},"211":{"name":"STEEL WING","category":"Physical"},"212":{"name":"MEAN LOOK","category":"Status"},"213":{"name":"ATTRACT","category":"Status"},"214":{"name":"SLEEP TALK","category":"Status"},"215":{"name":"HEAL BELL","category":"Status"},"216":{"name":"RETURN","category":"Physical"},"217":{"name":"PRESENT","category":"Physical"},"218":{"name":"FRUSTRATION","category":"Physical"},"219":{"name":"SAFEGUARD","category":"Status"},"220":{"name":"PAIN SPLIT","category":"Status"},"221":{"name":"SACRED FIRE","category":"Physical"},"222":{"name":"MAGNITUDE","category":"Physical"},"223":{"name":"DYNAMIC PUNCH","category":"Physical"},"224":{"name":"MEGAHORN","category":"Physical"},"225":{"name":"DRAGON BREATH","category":"Special"},"226":{"name":"BATON PASS","category":"Status"},"227":{"name":"ENCORE","category":"Status"},"228":{"name":"PURSUIT","category":"Physical"},"229":{"name":"RAPID SPIN","category":"Physical"},"230":{"name":"SWEET SCENT","category":"Status"},"231":{"name":"IRON TAIL","category":"Physical"},"232":{"name":"METAL CLAW","category":"Physical"},"233":{"name":"VITAL THROW","category":"Physical"},"234":{"name":"MORNING SUN","category":"Status"},"235":{"name":"SYNTHESIS","category":"Status"},"236":{"name":"MOONLIGHT","category":"Status"},"237":{"name":"HIDDEN POWER","category":"Special"},"238":{"name":"CROSS CHOP","category":"Physical"},"239":{"name":"TWISTER","category":"Special"},"240":{"name":"RAIN DANCE","category":"Status"},"241":{"name":"SUNNY DAY","category":"Status"},"242":{"name":"CRUNCH","category":"Physical"},"243":{"name":"MIRROR COAT","category":"Special"},"244":{"name":"PSYCH UP","category":"Status"},"245":{"name":"EXTREME SPEED","category":"Physical"},"246":{"name":"ANCIENT POWER","category":"Special"},"247":{"name":"SHADOW BALL","category":"Special"},"248":{"name":"FUTURE SIGHT","category":"Special"},"249":{"name":"ROCK SMASH","category":"Physical"},"250":{"name":"WHIRLPOOL","category":"Special"},"251":{"name":"BEAT UP","category":"Physical"},"253":{"name":"UPROAR","category":"Special"},"254":{"name":"STOCKPILE","category":"Status"},"255":{"name":"SPIT UP","category":"Special"},"256":{"name":"SWALLOW","category":"Status"},"257":{"name":"HEAT WAVE","category":"Special"},"258":{"name":"HAIL","category":"Status"},"259":{"name":"TORMENT","category":"Status"},"260":{"name":"FLATTER","category":"Status"},"261":{"name":"WILL-O-WISP","category":"Status"},"262":{"name":"MEMENTO","category":"Status"},"263":{"name":"FACADE","category":"Physical"},"264":{"name":"FOCUS PUNCH","category":"Physical"},"265":{"name":"SMELLING SALTS","category":"Physical"},"266":{"name":"FOLLOW ME","category":"Status"},"267":{"name":"NATURE POWER","category":"Status"},"268":{"name":"CHARGE","category":"Status"},"269":{"name":"TAUNT","category":"Status"},"270":{"name":"HELPING HAND","category":"Status"},"271":{"name":"TRICK","category":"Status"},"272":{"name":"ROLE PLAY","category":"Status"},"273":{"name":"WISH","category":"Status"},"274":{"name":"ASSIST","category":"Status"},"275":{"name":"INGRAIN","category":"Status"},"276":{"name":"SUPERPOWER","category":"Physical"},"277":{"name":"MAGIC COAT","category":"Status"},"278":{"name":"RECYCLE","category":"Status"},"279":{"name":"REVENGE","category":"Physical"},"280":{"name":"BRICK BREAK","category":"Physical"},"281":{"name":"YAWN","category":"Status"},"282":{"name":"KNOCK OFF","category":"Physical"},"283":{"name":"ENDEAVOR","category":"Physical"},"284":{"name":"ERUPTION","category":"Special"},"285":{"name":"SKILL SWAP","category":"Status"},"286":{"name":"IMPRISON","category":"Status"},"287":{"name":"REFRESH","category":"Status"},"288":{"name":"GRUDGE","category":"Status"},"289":{"name":"SNATCH","category":"Status"},"290":{"name":"SECRET POWER","category":"Physical"},"291":{"name":"DIVE","category":"Physical"},"292":{"name":"ARM THRUST","category":"Physical"},"293":{"name":"CAMOUFLAGE","category":"Status"},"294":{"name":"TAIL GLOW","category":"Status"},"295":{"name":"LUSTER PURGE","category":"Special"},"296":{"name":"MIST BALL","category":"Special"},"297":{"name":"FEATHER DANCE","category":"Status"},"298":{"name":"TEETER DANCE","category":"Status"},"299":{"name":"BLAZE KICK","category":"Physical"},"300":{"name":"MUD SPORT","category":"Status"},"301":{"name":"ICE BALL","category":"Physical"},"302":{"name":"NEEDLE ARM","category":"Physical"},"303":{"name":"SLACK OFF","category":"Status"},"304":{"name":"HYPER VOICE","category":"Special"},"305":{"name":"POISON FANG","category":"Physical"},"306":{"name":"CRUSH CLAW","category":"Physical"},"307":{"name":"BLAST BURN","category":"Special"},"308":{"name":"HYDRO CANNON","category":"Special"},"309":{"name":"METEOR MASH","category":"Physical"},"310":{"name":"ASTONISH","category":"Physical"},"311":{"name":"WEATHER BALL","category":"Special"},"312":{"name":"AROMATHERAPY","category":"Status"},"313":{"name":"FAKE TEARS","category":"Status"},"314":{"name":"AIR CUTTER","category":"Special"},"315":{"name":"OVERHEAT","category":"Special"},"316":{"name":"ODOR SLEUTH","category":"Status"},"317":{"name":"ROCK TOMB","category":"Physical"},"318":{"name":"SILVER WIND","category":"Special"},"319":{"name":"METAL SOUND","category":"Status"},"320":{"name":"GRASS WHISTLE","category":"Status"},"321":{"name":"TICKLE","category":"Status"},"322":{"name":"COSMIC POWER","category":"Status"},"323":{"name":"WATER SPOUT","category":"Special"},"324":{"name":"SIGNAL BEAM","category":"Special"},"325":{"name":"SHADOW PUNCH","category":"Physical"},"326":{"name":"EXTRASENSORY","category":"Special"},"327":{"name":"SKY UPPERCUT","category":"Physical"},"328":{"name":"SAND TOMB","category":"Physical"},"329":{"name":"SHEER COLD","category":"Special"},"330":{"name":"MUDDY WATER","category":"Special"},"331":{"name":"BULLET SEED","category":"Physical"},"332":{"name":"AERIAL ACE","category":"Physical"},"333":{"name":"ICICLE SPEAR","category":"Physical"},"334":{"name":"IRON DEFENSE","category":"Status"},"335":{"name":"BLOCK","category":"Status"},"336":{"name":"HOWL","category":"Status"},"337":{"name":"DRAGON CLAW","category":"Physical"},"338":{"name":"FRENZY PLANT","category":"Special"},"339":{"name":"BULK UP","category":"Status"},"340":{"name":"BOUNCE","category":"Physical"},"341":{"name":"MUD SHOT","category":"Special"},"342":{"name":"POISON TAIL","category":"Physical"},"343":{"name":"COVET","category":"Physical"},"344":{"name":"VOLT TACKLE","category":"Physical"},"345":{"name":"MAGICAL LEAF","category":"Special"},"346":{"name":"WATER SPORT","category":"Status"},"347":{"name":"CALM MIND","category":"Status"},"348":{"name":"LEAF BLADE","category":"Physical"},"349":{"name":"DRAGON DANCE","category":"Status"},"350":{"name":"ROCK BLAST","category":"Physical"},"351":{"name":"SHOCK WAVE","category":"Special"},"352":{"name":"WATER PULSE","category":"Special"},"353":{"name":"DOOM DESIRE","category":"Special"},"354":{"name":"PSYCHO BOOST","category":"Special"},"356":{"name":"GRAVITY","category":"Status"},"357":{"name":"MIRACLE EYE","category":"Status"},"358":{"name":"WAKE-UP SLAP","category":"Physical"},"359":{"name":"HAMMER ARM","category":"Physical"},"360":{"name":"GYRO BALL","category":"Physical"},"361":{"name":"HEALING WISH","category":"Status"},"362":{"name":"BRINE","category":"Special"},"363":{"name":"NATURAL GIFT","category":"Physical"},"364":{"name":"FEINT","category":"Physical"},"365":{"name":"PLUCK","category":"Physical"},"366":{"name":"TAILWIND","category":"Status"},"367":{"name":"ACUPRESSURE","category":"Status"},"368":{"name":"METAL BURST","category":"Physical"},"369":{"name":"U-TURN","category":"Physical"},"370":{"name":"CLOSE COMBAT","category":"Physical"},"371":{"name":"PAYBACK","category":"Physical"},"372":{"name":"ASSURANCE","category":"Physical"},"373":{"name":"EMBARGO","category":"Status"},"374":{"name":"FLING","category":"Physical"},"375":{"name":"PSYCHO SHIFT","category":"Status"},"376":{"name":"TRUMP CARD","category":"Special"},"377":{"name":"HEAL BLOCK","category":"Status"},"378":{"name":"WRING OUT","category":"Special"},"379":{"name":"POWER TRICK","category":"Status"},"380":{"name":"GASTRO ACID","category":"Status"},"381":{"name":"LUCKY CHANT","category":"Status"},"382":{"name":"ME FIRST","category":"Status"},"383":{"name":"COPYCAT","category":"Status"},"384":{"name":"POWER SWAP","category":"Status"},"385":{"name":"GUARD SWAP","category":"Status"},"386":{"name":"PUNISHMENT","category":"Physical"},"387":{"name":"LAST RESORT","category":"Physical"},"388":{"name":"WORRY SEED","category":"Status"},"389":{"name":"SUCKER PUNCH","category":"Physical"},"390":{"name":"TOXIC SPIKES","category":"Status"},"391":{"name":"HEART SWAP","category":"Status"},"392":{"name":"AQUA RING","category":"Status"},"393":{"name":"MAGNET RISE","category":"Status"},"394":{"name":"FLARE BLITZ","category":"Physical"},"395":{"name":"FORCE PALM","category":"Physical"},"396":{"name":"AURA SPHERE","category":"Special"},"397":{"name":"ROCK POLISH","category":"Status"},"398":{"name":"POISON JAB","category":"Physical"},"399":{"name":"DARK PULSE","category":"Special"},"400":{"name":"NIGHT SLASH","category":"Physical"},"401":{"name":"AQUA TAIL","category":"Physical"},"402":{"name":"SEED BOMB","category":"Physical"},"403":{"name":"AIR SLASH","category":"Special"},"404":{"name":"X-SCISSOR","category":"Physical"},"405":{"name":"BUG BUZZ","category":"Special"},"406":{"name":"DRAGON PULSE","category":"Special"},"407":{"name":"DRAGON RUSH","category":"Physical"},"408":{"name":"POWER GEM","category":"Special"},"409":{"name":"DRAIN PUNCH","category":"Physical"},"410":{"name":"VACUUM WAVE","category":"Special"},"411":{"name":"FOCUS BLAST","category":"Special"},"412":{"name":"ENERGY BALL","category":"Special"},"413":{"name":"BRAVE BIRD","category":"Physical"},"414":{"name":"EARTH POWER","category":"Special"},"415":{"name":"SWITCHEROO","category":"Status"},"416":{"name":"GIGA IMPACT","category":"Physical"},"417":{"name":"NASTY PLOT","category":"Status"},"418":{"name":"BULLET PUNCH","category":"Physical"},"419":{"name":"AVALANCHE","category":"Physical"},"420":{"name":"ICE SHARD","category":"Physical"},"421":{"name":"SHADOW CLAW","category":"Physical"},"422":{"name":"THUNDER FANG","category":"Physical"},"423":{"name":"ICE FANG","category":"Physical"},"424":{"name":"FIRE FANG","category":"Physical"},"425":{"name":"SHADOW SNEAK","category":"Physical"},"426":{"name":"MUD BOMB","category":"Special"},"427":{"name":"PSYCHO CUT","category":"Physical"},"428":{"name":"ZEN HEADBUTT","category":"Physical"},"429":{"name":"MIRROR SHOT","category":"Special"},"430":{"name":"FLASH CANNON","category":"Special"},"431":{"name":"ROCK CLIMB","category":"Physical"},"432":{"name":"DEFOG","category":"Status"},"433":{"name":"TRICK ROOM","category":"Status"},"434":{"name":"DRACO METEOR","category":"Special"},"435":{"name":"DISCHARGE","category":"Special"},"436":{"name":"LAVA PLUME","category":"Special"},"437":{"name":"LEAF STORM","category":"Special"},"438":{"name":"POWER WHIP","category":"Physical"},"439":{"name":"ROCK WRECKER","category":"Physical"},"440":{"name":"CROSS POISON","category":"Physical"},"441":{"name":"GUNK SHOT","category":"Physical"},"442":{"name":"IRON HEAD","category":"Physical"},"443":{"name":"MAGNET BOMB","category":"Physical"},"444":{"name":"STONE EDGE","category":"Physical"},"445":{"name":"CAPTIVATE","category":"Status"},"446":{"name":"STEALTH ROCK","category":"Status"},"447":{"name":"GRASS KNOT","category":"Special"},"448":{"name":"CHATTER","category":"Special"},"449":{"name":"JUDGMENT","category":"Special"},"450":{"name":"BUG BITE","category":"Physical"},"451":{"name":"CHARGE BEAM","category":"Special"},"452":{"name":"WOOD HAMMER","category":"Physical"},"453":{"name":"AQUA JET","category":"Physical"},"454":{"name":"ATTACK ORDER","category":"Physical"},"455":{"name":"DEFEND ORDER","category":"Status"},"456":{"name":"HEAL ORDER","category":"Status"},"457":{"name":"HEAD SMASH","category":"Physical"},"458":{"name":"DOUBLE HIT","category":"Physical"},"459":{"name":"ROAR OF TIME","category":"Special"},"460":{"name":"SPACIAL REND","category":"Special"},"461":{"name":"LUNAR DANCE","category":"Status"},"462":{"name":"CRUSH GRIP","category":"Physical"},"463":{"name":"MAGMA STORM","category":"Special"},"464":{"name":"DARK VOID","category":"Status"},"465":{"name":"SEED FLARE","category":"Special"},"466":{"name":"OMINOUS WIND","category":"Special"},"467":{"name":"SHADOW FORCE","category":"Physical"},"469":{"name":"WIDE GUARD","category":"Status"},"470":{"name":"GUARD SPLIT","category":"Status"},"471":{"name":"POWER SPLIT","category":"Status"},"472":{"name":"WONDER ROOM","category":"Status"},"473":{"name":"PSYSHOCK","category":"Special"},"474":{"name":"VENOSHOCK","category":"Special"},"475":{"name":"AUTOTOMIZE","category":"Status"},"476":{"name":"RAGE POWDER","category":"Status"},"477":{"name":"TELEKINESIS","category":"Status"},"478":{"name":"MAGIC ROOM","category":"Status"},"479":{"name":"SMACK DOWN","category":"Physical"},"480":{"name":"STORM THROW","category":"Physical"},"481":{"name":"FLAME BURST","category":"Special"},"482":{"name":"SLUDGE WAVE","category":"Special"},"483":{"name":"QUIVER DANCE","category":"Status"},"484":{"name":"HEAVY SLAM","category":"Physical"},"485":{"name":"SYNCHRONOISE","category":"Special"},"486":{"name":"ELECTRO BALL","category":"Special"},"487":{"name":"SOAK","category":"Status"},"488":{"name":"FLAME CHARGE","category":"Physical"},"489":{"name":"COIL","category":"Status"},"490":{"name":"LOW SWEEP","category":"Physical"},"491":{"name":"ACID SPRAY","category":"Special"},"492":{"name":"FOUL PLAY","category":"Physical"},"493":{"name":"SIMPLE BEAM","category":"Status"},"494":{"name":"ENTRAINMENT","category":"Status"},"495":{"name":"AFTER YOU","category":"Status"},"496":{"name":"ROUND","category":"Special"},"497":{"name":"ECHOED VOICE","category":"Special"},"498":{"name":"CHIP AWAY","category":"Physical"},"499":{"name":"CLEAR SMOG","category":"Special"},"500":{"name":"STORED POWER","category":"Special"},"501":{"name":"QUICK GUARD","category":"Status"},"502":{"name":"ALLY SWITCH","category":"Status"},"503":{"name":"SCALD","category":"Special"},"504":{"name":"SHELL SMASH","category":"Status"},"505":{"name":"HEAL PULSE","category":"Status"},"506":{"name":"HEX","category":"Special"},"507":{"name":"SKY DROP","category":"Physical"},"508":{"name":"SHIFT GEAR","category":"Status"},"509":{"name":"CIRCLE THROW","category":"Physical"},"510":{"name":"INCINERATE","category":"Special"},"511":{"name":"QUASH","category":"Status"},"512":{"name":"ACROBATICS","category":"Physical"},"513":{"name":"REFLECT TYPE","category":"Status"},"514":{"name":"RETALIATE","category":"Physical"},"515":{"name":"FINAL GAMBIT","category":"Special"},"516":{"name":"BESTOW","category":"Status"},"517":{"name":"INFERNO","category":"Special"},"518":{"name":"WATER PLEDGE","category":"Special"},"519":{"name":"FIRE PLEDGE","category":"Special"},"520":{"name":"GRASS PLEDGE","category":"Special"},"521":{"name":"VOLT SWITCH","category":"Special"},"522":{"name":"STRUGGLE BUG","category":"Special"},"523":{"name":"BULLDOZE","category":"Physical"},"524":{"name":"FROST BREATH","category":"Special"},"525":{"name":"DRAGON TAIL","category":"Physical"},"526":{"name":"WORK UP","category":"Status"},"527":{"name":"ELECTROWEB","category":"Special"},"528":{"name":"WILD CHARGE","category":"Physical"},"529":{"name":"DRILL RUN","category":"Physical"},"530":{"name":"DUAL CHOP","category":"Physical"},"531":{"name":"HEART STAMP","category":"Physical"},"532":{"name":"HORN LEECH","category":"Physical"},"533":{"name":"SACRED SWORD","category":"Physical"},"534":{"name":"RAZOR SHELL","category":"Physical"},"535":{"name":"HEAT CRASH","category":"Physical"},"536":{"name":"LEAF TORNADO","category":"Special"},"537":{"name":"STEAMROLLER","category":"Physical"},"538":{"name":"COTTON GUARD","category":"Status"},"539":{"name":"NIGHT DAZE","category":"Special"},"540":{"name":"PSYSTRIKE","category":"Special"},"541":{"name":"TAIL SLAP","category":"Physical"},"542":{"name":"HURRICANE","category":"Special"},"543":{"name":"HEAD CHARGE","category":"Physical"},"544":{"name":"GEAR GRIND","category":"Physical"},"545":{"name":"SEARING SHOT","category":"Special"},"546":{"name":"TECHNO BLAST","category":"Special"},"547":{"name":"RELIC SONG","category":"Special"},"548":{"name":"SECRET SWORD","category":"Special"},"549":{"name":"GLACIATE","category":"Special"},"550":{"name":"BOLT STRIKE","category":"Physical"},"551":{"name":"BLUE FLARE","category":"Special"},"552":{"name":"FIERY DANCE","category":"Special"},"553":{"name":"FREEZE SHOCK","category":"Physical"},"554":{"name":"ICE BURN","category":"Special"},"555":{"name":"SNARL","category":"Special"},"556":{"name":"ICICLE CRASH","category":"Physical"},"557":{"name":"V-CREATE","category":"Physical"},"558":{"name":"FUSION FLARE","category":"Special"},"559":{"name":"FUSION BOLT","category":"Physical"}};
 
@@ -71,10 +71,6 @@
   let lastEncounterId = null;
   let lastBattleState = false;
   let defaultLayoutApplied = false;
-  let abilityEncounterKey = "";
-  let abilityPending = "";
-  let abilityPendingCount = 0;
-  let abilityDisplay = "…";
 
   const read32LE = (u8, off) => (
     (u8[off] |
@@ -140,35 +136,6 @@
 
   const normalizeName = s =>
     String(s ?? "").trim().toUpperCase().replace(/[\s\-]+/g, "");
-
-  const normalizeAbility = value => {
-    if (typeof value === "string") return value.trim();
-    if (value && typeof value === "object" && typeof value.name === "string") return value.name.trim();
-    return "";
-  };
-
-  const getStableAbility = data => {
-    const key = `${data?.enemy?.speciesId ?? 0}|${data?.enemy?.level ?? 0}|${currentEnemyBase ?? ""}`;
-    if (key !== abilityEncounterKey) {
-      abilityEncounterKey = key;
-      abilityPending = "";
-      abilityPendingCount = 0;
-      abilityDisplay = "…";
-    }
-
-    const candidate = normalizeAbility(data?.enemy?.ability);
-    if (!candidate || candidate === "?" || candidate === "—") return abilityDisplay;
-
-    if (candidate === abilityPending) {
-      abilityPendingCount++;
-    } else {
-      abilityPending = candidate;
-      abilityPendingCount = 1;
-    }
-
-    if (abilityPendingCount >= 3) abilityDisplay = candidate;
-    return abilityDisplay;
-  };
 
   const getRuntimeMove = (data, moveInfo) => {
     const liveMoves = Array.isArray(data?.enemy?.moves) ? data.enemy.moves : [];
@@ -419,23 +386,21 @@
     const updateResponsiveFonts = () => {
       const r = box.getBoundingClientRect();
       if (r.width < 100 || r.height < 100) return;
-      const widthScale = r.width / 340;
-      const heightScale = r.height / 420;
+      const widthScale = r.width / 360;
+      const heightScale = r.height / 410;
       const areaScale = Math.sqrt(Math.max(0.01, widthScale * heightScale));
-      const widthCap = r.width / 300;
-      const scale = Math.max(0.68, Math.min(1.5, areaScale, widthCap));
+      const scale = Math.max(0.7, Math.min(1.42, areaScale, widthScale * 1.08));
       const fonts = {
         "--cws-base-font": 13,
-        "--cws-title-font": 19,
-        "--cws-name-font": 19,
-        "--cws-kind-font": 14,
+        "--cws-title-font": 18,
+        "--cws-subtitle-font": 10,
+        "--cws-name-font": 21,
+        "--cws-kind-font": 12,
         "--cws-hp-font": 16,
-        "--cws-type-font": 14,
-        "--cws-label-font": 14,
-        "--cws-ability-font": 17,
-        "--cws-stats-font": 18,
-        "--cws-moves-title-font": 15,
-        "--cws-move-font": 16
+        "--cws-type-font": 13,
+        "--cws-stats-font": 17,
+        "--cws-moves-title-font": 14,
+        "--cws-move-font": 15
       };
       for (const [name, base] of Object.entries(fonts)) {
         box.style.setProperty(name, `${Math.round(base * scale * 10) / 10}px`);
@@ -539,9 +504,12 @@
     box.id = "celarys-wild-stats-box";
     box.innerHTML = `
       <div class="cws-topbar" title="Trascina per spostare">
-        <div class="cws-lens"></div>
-        <div class="cws-title">
-          <b>STARTAB DEX</b>
+        <div class="cws-brand">
+          <div class="cws-lens"></div>
+          <div class="cws-title">
+            <b>STARTAB DEX</b>
+            <span>ENCOUNTER DATA</span>
+          </div>
         </div>
         <div class="cws-leds"><i></i><i></i><i></i></div>
       </div>
@@ -552,30 +520,34 @@
         <div id="cws-body" class="cws-body" style="display:none">
           <div class="cws-upper">
             <div class="cws-profile">
-              <div style="display: block">
-              <div id="cws-sprite" class="cws-sprite">
-                <div class="cws-pokeball"></div>
+              <div class="cws-visual">
+                <div id="cws-sprite" class="cws-sprite"><div class="cws-pokeball"></div></div>
               </div>
-              <div id="cws-types" class="cws-types"></div>
-              </div>
+
               <div class="cws-profile-info">
-                <div class="cws-name-row">
-                  <div id="cws-name" class="cws-name">—</div>
+                <div class="cws-encounter-row">
                   <div id="cws-battle-kind" class="cws-battle-kind">WILD</div>
+                  <span>ENCOUNTER</span>
                 </div>
-                <div id="cws-hpline" class="cws-hpline">HP — / —</div>
-                <div class="cws-label">ABILITY</div>
-                <div id="cws-ability" class="cws-ability">—</div>
+                <div id="cws-name" class="cws-name">—</div>
+
+                <div class="cws-hp-card">
+                  <div class="cws-hp-row"><span>HP</span><b id="cws-hpline">— / —</b></div>
+                  <div class="cws-hp-track"><i id="cws-hpfill"></i></div>
+                </div>
+
+                <div id="cws-types" class="cws-types"></div>
+
               </div>
             </div>
 
             <div class="cws-stats">
-              <div><span>HP</span><b id="cws-hp">—</b></div>
-              <div><span>ATK</span><b id="cws-atk">—</b></div>
-              <div><span>DEF</span><b id="cws-def">—</b></div>
-              <div><span>SPA</span><b id="cws-spa">—</b></div>
-              <div><span>SPD</span><b id="cws-spd">—</b></div>
-              <div><span>SPE</span><b id="cws-spe">—</b></div>
+              <div class="cws-stat-hp"><span>HP</span><b id="cws-hp">—</b></div>
+              <div class="cws-stat-atk"><span>ATK</span><b id="cws-atk">—</b></div>
+              <div class="cws-stat-def"><span>DEF</span><b id="cws-def">—</b></div>
+              <div class="cws-stat-spa"><span>SPA</span><b id="cws-spa">—</b></div>
+              <div class="cws-stat-spd"><span>SPD</span><b id="cws-spd">—</b></div>
+              <div class="cws-stat-spe"><span>SPE</span><b id="cws-spe">—</b></div>
               <div class="cws-bst"><span>BST</span><b id="cws-bst">—</b></div>
             </div>
           </div>
@@ -583,13 +555,12 @@
           <div class="cws-divider"></div>
 
           <div class="cws-moves-title">
-            <span>MOVES</span>
+            <span id="cws-move-count">MOVES 0/4</span>
             <small>PP</small><small>POW</small><small>ACC</small>
           </div>
           <div id="cws-moves" class="cws-moves"></div>
         </div>
       </div>
-
     `;
 
     Object.assign(box.style, {
@@ -597,10 +568,10 @@
       left: "10px",
       top: "10px",
       zIndex: "2147483647",
-      width: "min(340px, calc(100vw - 20px))",
+      width: "min(474px, calc(100vw - 20px))",
       height: "auto",
-      minWidth: "min(220px, calc(100vw - 8px))",
-      minHeight: "0",
+      minWidth: "min(230px, calc(100vw - 8px))",
+      minHeight: "260px",
       maxWidth: "calc(100vw - 8px)",
       maxHeight: "calc(100vh - 8px)",
       resize: "both",
@@ -614,61 +585,70 @@
     const style = document.createElement("style");
     style.textContent = `
       #celarys-wild-stats-box{
-        --red:#cf2f36;--darkred:#681a20;--screen:#202322;--line:#a7aaa8;
-        --text:#f4f5f2;--muted:#b8bbb7;--lime:#c6e46d;--cyan:#86dfe4;
-        font-family:VPPixel,monospace;font-size:var(--cws-base-font,13px);line-height:1;color:#fff;
-        text-shadow:var(--tr-shadow-off,1px) var(--tr-shadow-off,1px) 0 #1F1F1F;
-        white-space:normal;background:linear-gradient(#e2454c,#bd252c);
-        border:3px solid var(--darkred);border-radius:15px;
-        box-shadow:0 5px 0 #54151a,0 11px 26px rgba(0,0,0,.42);
-        scrollbar-width:thin;display:flex;flex-direction:column;
+        --frame:#8f9cad;--frame-dark:#364150;--panel:#141a22;--panel-2:#1b232e;--panel-3:#202a36;
+        --line:#3a4758;--line-soft:#293545;--text:#f4f6f8;--muted:#93a1b4;--green:#41df78;
+        font-family:VPPixel,monospace;font-size:var(--cws-base-font,13px);line-height:1;color:var(--text);
+        text-shadow:var(--tr-shadow-off,1px) var(--tr-shadow-off,1px) 0 #0a0d12;
+        white-space:normal;background:#10151c;border:2px solid var(--frame);border-radius:10px;
+        box-shadow:0 5px 0 #070a0e,0 12px 28px rgba(0,0,0,.42);scrollbar-width:thin;
+        display:flex;flex-direction:column;isolation:isolate;
       }
+      #celarys-wild-stats-box::before{content:"";position:absolute;inset:3px;pointer-events:none;border:1px solid #252f3c;border-radius:7px}
       #celarys-wild-stats-box *{box-sizing:border-box;font-family:VPPixel,monospace;min-width:0}
-      #celarys-wild-stats-box .cws-title b{font-size:var(--cws-title-font,19px);line-height:1;font-weight:900;letter-spacing:.04em}
-      #celarys-wild-stats-box .cws-name{font-size:var(--cws-name-font,19px);line-height:1;font-weight:900;overflow-wrap:anywhere}
-      #celarys-wild-stats-box .cws-battle-kind{font-size:var(--cws-kind-font,14px)}
-      #celarys-wild-stats-box .cws-hpline{font-size:var(--cws-hp-font,16px)}
-      #celarys-wild-stats-box .cws-type{font-size:var(--cws-type-font,14px)}
-      #celarys-wild-stats-box .cws-label{font-size:var(--cws-label-font,14px)}
-      #celarys-wild-stats-box .cws-ability{font-size:var(--cws-ability-font,17px)}
-      #celarys-wild-stats-box .cws-stats span,#celarys-wild-stats-box .cws-stats b{font-size:var(--cws-stats-font,18px)}
-      #celarys-wild-stats-box .cws-moves-title span,#celarys-wild-stats-box .cws-moves-title small{font-size:var(--cws-moves-title-font,15px)}
-      #celarys-wild-stats-box .cws-move-name,#celarys-wild-stats-box .cws-num{font-size:var(--cws-move-font,16px)}
-      #celarys-wild-stats-box .cws-topbar{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:8px;align-items:center;padding:6px 9px;background:linear-gradient(rgba(255,255,255,.16),rgba(0,0,0,.05))}
-      #celarys-wild-stats-box .cws-lens{width:30px;height:30px;border-radius:50%;border:3px solid #f1efe4;background:radial-gradient(circle at 34% 28%,#fff 0 8%,#a7eeff 10% 28%,#37aee0 31% 67%,#13648a 69%);box-shadow:0 0 0 2px #5b191d}
-      #celarys-wild-stats-box .cws-title{display:flex;flex-direction:column}
-      #celarys-wild-stats-box .cws-leds{display:flex;gap:4px;align-self:start;margin-top:2px}
-      #celarys-wild-stats-box .cws-leds i{width:8px;height:8px;border-radius:50%;background:#f4d44b;border:1px solid #65191e}
-      #celarys-wild-stats-box .cws-leds i:nth-child(2){background:#67d86d}
-      #celarys-wild-stats-box .cws-leds i:nth-child(3){background:#62a9ee}
-      #celarys-wild-stats-box .cws-shell{flex:1 1 auto;min-height:0;display:flex;padding:0 7px 7px}
-      #celarys-wild-stats-box .cws-body,#celarys-wild-stats-box .cws-status{width:100%;height:100%;min-height:0;background:var(--screen);border:2px solid #111;box-shadow:inset 0 0 0 2px #333}
-      #celarys-wild-stats-box .cws-status{flex:1 1 auto;min-height:120px;display:grid;place-items:center;padding:14px;color:var(--lime);font-weight:800;text-align:center;white-space:normal;overflow:auto}
-      #celarys-wild-stats-box .cws-body{flex:1 1 auto;padding:7px;display:flex;flex-direction:column;overflow:auto}
-      #celarys-wild-stats-box .cws-upper{display:grid;grid-template-columns:1fr;gap:6px;flex:0 0 auto}
-      #celarys-wild-stats-box .cws-profile{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;border-bottom:2px solid var(--line);padding-bottom:6px}
-      #celarys-wild-stats-box .cws-sprite{min-height:72px;display:grid;place-items:center;overflow:hidden;position:relative}
+      #celarys-wild-stats-box .cws-title b{font-size:var(--cws-title-font,18px);line-height:1;font-weight:900;letter-spacing:.035em}
+      #celarys-wild-stats-box .cws-title span{font-size:var(--cws-subtitle-font,10px);color:var(--muted);letter-spacing:.08em;margin-top:3px}
+      #celarys-wild-stats-box .cws-name{font-size:var(--cws-name-font,21px);line-height:1.05;font-weight:900;overflow-wrap:anywhere}
+      #celarys-wild-stats-box .cws-battle-kind{font-size:var(--cws-kind-font,12px)}
+      #celarys-wild-stats-box .cws-hp-row{font-size:var(--cws-hp-font,16px)}
+      #celarys-wild-stats-box .cws-type{font-size:var(--cws-type-font,13px)}
+      #celarys-wild-stats-box .cws-stats span,#celarys-wild-stats-box .cws-stats b{font-size:var(--cws-stats-font,17px)}
+      #celarys-wild-stats-box .cws-moves-title span,#celarys-wild-stats-box .cws-moves-title small{font-size:var(--cws-moves-title-font,14px)}
+      #celarys-wild-stats-box .cws-move-name,#celarys-wild-stats-box .cws-num{font-size:var(--cws-move-font,15px)}
+      #celarys-wild-stats-box .cws-topbar{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 9px;background:linear-gradient(180deg,#202936,#151b24);border-bottom:1px solid var(--frame-dark);flex:0 0 auto}
+      #celarys-wild-stats-box .cws-brand{display:flex;align-items:center;gap:8px;min-width:0}
+      #celarys-wild-stats-box .cws-lens{width:25px;height:25px;flex:0 0 25px;border-radius:50%;border:2px solid #d8e1ea;background:radial-gradient(circle at 34% 28%,#fff 0 7%,#9eeeff 9% 26%,#3ba9dd 29% 65%,#175b80 68%);box-shadow:0 0 0 2px #0d1117}
+      #celarys-wild-stats-box .cws-title{display:flex;flex-direction:column;min-width:0}
+      #celarys-wild-stats-box .cws-leds{display:flex;gap:4px;align-items:center}
+      #celarys-wild-stats-box .cws-leds i{width:7px;height:7px;border-radius:50%;background:#ef6464;border:1px solid #0d1117}
+      #celarys-wild-stats-box .cws-leds i:nth-child(2){background:#f1c954}
+      #celarys-wild-stats-box .cws-leds i:nth-child(3){background:#5ed381}
+      #celarys-wild-stats-box .cws-shell{position:relative;z-index:1;flex:1 1 auto;min-height:0;display:flex;padding:6px;background:#0d1218}
+      #celarys-wild-stats-box .cws-body,#celarys-wild-stats-box .cws-status{width:100%;height:100%;min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:5px}
+      #celarys-wild-stats-box .cws-status{flex:1 1 auto;min-height:120px;display:grid;place-items:center;padding:14px;color:#b9dc75;font-weight:800;text-align:center;white-space:normal;overflow:auto}
+      #celarys-wild-stats-box .cws-body{flex:1 1 auto;padding:6px;display:flex;flex-direction:column;overflow:auto}
+      #celarys-wild-stats-box .cws-upper{display:grid;grid-template-columns:1fr;gap:6px;flex:1 1 auto;align-content:start;min-height:0}
+      #celarys-wild-stats-box .cws-profile{display:grid;grid-template-columns:82px minmax(0,1fr);gap:7px;min-height:0;padding:6px;background:linear-gradient(180deg,var(--panel-2),#171e27);border:1px solid var(--line);border-radius:5px}
+      #celarys-wild-stats-box .cws-visual{display:flex;align-items:flex-start;justify-content:center}
+      #celarys-wild-stats-box .cws-sprite{width:78px;height:78px;display:grid;place-items:center;overflow:hidden;position:relative;background:#10161e;border:1px solid #334154;border-radius:4px}
       #celarys-wild-stats-box .cws-sprite-sheet{width:64px;height:64px;image-rendering:pixelated;background-repeat:no-repeat}
-      #celarys-wild-stats-box .cws-pokeball{width:44px;height:44px;border:4px solid #555;border-radius:50%;background:linear-gradient(#8f3034 0 44%,#555 45% 55%,#d9d9d3 56%)}
-      #celarys-wild-stats-box .cws-profile-info{padding:2px 0}
-      #celarys-wild-stats-box .cws-name-row{display:flex;gap:6px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
-      #celarys-wild-stats-box .cws-battle-kind{flex:0 0 auto;padding:2px 5px;background:#f0c43e;color:#29230d;border-radius:3px;font-weight:900;text-shadow:none}
-      #celarys-wild-stats-box .cws-hpline{margin:6px 0;color:#fff}
-      #celarys-wild-stats-box .cws-types{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
-      #celarys-wild-stats-box .cws-type{padding:2px 5px;border:1px solid #d7d7d3;border-radius:3px;background:#363a38;font-weight:900}
-      #celarys-wild-stats-box .cws-label{color:var(--muted);letter-spacing:.1em}
-      #celarys-wild-stats-box .cws-ability{font-weight:900;color:#f4e927;margin-top:2px;overflow-wrap:anywhere;white-space:normal}
-      #celarys-wild-stats-box .cws-stats{display:grid;align-content:start;border-radius:4px;padding:2px 8px;overflow:hidden}
-      #celarys-wild-stats-box .cws-stats>div{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:2px 5px}
+      #celarys-wild-stats-box .cws-pokeball{width:40px;height:40px;border:4px solid #596778;border-radius:50%;background:linear-gradient(#a34248 0 44%,#596778 45% 55%,#d9dde1 56%)}
+      #celarys-wild-stats-box .cws-profile-info{display:flex;flex-direction:column;align-items:stretch;min-height:0}
+      #celarys-wild-stats-box .cws-encounter-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;color:var(--muted);font-weight:900;letter-spacing:.04em}
+      #celarys-wild-stats-box .cws-battle-kind{flex:0 0 auto;padding:2px 5px;background:#d7b33c;color:#16130a;border:1px solid #f1d878;border-radius:3px;font-weight:900;text-shadow:none}
+      #celarys-wild-stats-box .cws-hp-card{margin-top:6px;padding:5px 6px;background:#111820;border:1px solid #2f3d4e;border-radius:4px}
+      #celarys-wild-stats-box .cws-hp-row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:900;font-variant-numeric:tabular-nums}
+      #celarys-wild-stats-box .cws-hp-row span{color:#d8dee6}
+      #celarys-wild-stats-box .cws-hp-track{height:6px;margin-top:4px;background:#26303c;border-radius:2px;overflow:hidden}
+      #celarys-wild-stats-box .cws-hp-track i{display:block;width:0;height:100%;background:var(--green);box-shadow:inset 0 -1px 0 rgba(0,0,0,.28);transition:width .18s ease,background .18s ease}
+      #celarys-wild-stats-box .cws-types{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+      #celarys-wild-stats-box .cws-type{padding:3px 6px;border:1px solid color-mix(in srgb,var(--type-color,#7f8a98) 60%,#fff 20%);border-radius:3px;background:color-mix(in srgb,var(--type-color,#7f8a98) 28%,#131921);color:#fff;font-weight:900;text-shadow:1px 1px 0 #0a0d12}
+      #celarys-wild-stats-box .cws-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;gap:1px;padding:1px;background:var(--line-soft);border:1px solid var(--line);border-radius:5px;overflow:hidden}
+      #celarys-wild-stats-box .cws-stats>div{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5px;padding:5px 6px;background:#151c25}
       #celarys-wild-stats-box .cws-stats span,#celarys-wild-stats-box .cws-stats b{font-weight:900}
-      #celarys-wild-stats-box .cws-stats b{font-variant-numeric:tabular-nums}
-      #celarys-wild-stats-box .cws-stats .cws-bst{border-bottom:0;margin-top:2px;padding-top:4px}
-      #celarys-wild-stats-box .cws-divider{height:2px;background:var(--line);margin:6px 0}
+      #celarys-wild-stats-box .cws-stats b{font-variant-numeric:tabular-nums;color:#fff}
+      #celarys-wild-stats-box .cws-stat-atk span{color:#ff6969}
+      #celarys-wild-stats-box .cws-stat-def span{color:#d9dde2}
+      #celarys-wild-stats-box .cws-stat-spa span{color:#58bdf5}
+      #celarys-wild-stats-box .cws-stat-spd span{color:#58df81}
+      #celarys-wild-stats-box .cws-stat-spe span{color:#f187bd}
+      #celarys-wild-stats-box .cws-bst span{color:#b8c2cf}
+      #celarys-wild-stats-box .cws-divider{height:1px;background:var(--frame-dark);margin:6px 0;flex:0 0 1px}
       #celarys-wild-stats-box .cws-moves-title,#celarys-wild-stats-box .cws-move{display:grid;grid-template-columns:minmax(0,1fr) 34px 38px 38px;gap:4px;align-items:center}
-      #celarys-wild-stats-box .cws-moves-title{padding:0 5px 5px;font-weight:900;border-bottom:2px solid var(--line);flex:0 0 auto}
-      #celarys-wild-stats-box .cws-moves-title small{text-align:center}
-      #celarys-wild-stats-box .cws-moves{flex:0 0 136px;height:136px;min-height:136px;max-height:136px;display:grid;grid-template-rows:repeat(4,34px);align-items:stretch;overflow:hidden}
-      #celarys-wild-stats-box .cws-move{min-height:34px;height:34px;padding:4px 5px}
+      #celarys-wild-stats-box .cws-moves-title{height:25px;padding:0 5px;font-weight:900;border:1px solid var(--line);border-bottom:0;border-radius:4px 4px 0 0;background:#1a222c;flex:0 0 25px}
+      #celarys-wild-stats-box .cws-moves-title small{text-align:center;color:var(--muted)}
+      #celarys-wild-stats-box .cws-moves{flex:0 0 136px;height:136px;min-height:136px;max-height:136px;display:grid;grid-template-rows:repeat(4,34px);align-items:stretch;overflow:hidden;border:1px solid var(--line);border-radius:0 0 4px 4px;background:#111820}
+      #celarys-wild-stats-box .cws-move{position:relative;min-height:34px;height:34px;padding:3px 5px;border-left:3px solid var(--move-color,#738093);border-bottom:1px solid #293545;background:#151c25}
+      #celarys-wild-stats-box .cws-move:nth-child(even){background:#18212b}
       #celarys-wild-stats-box .cws-move:last-child{border-bottom:0}
       #celarys-wild-stats-box .cws-move-name{display:flex;align-items:center;gap:5px;font-weight:900;overflow:hidden}
       #celarys-wild-stats-box .cws-move-name span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -676,41 +656,39 @@
       #celarys-wild-stats-box .cws-cat.physical{background:#ffc928;clip-path:polygon(50% 0,61% 31%,85% 15%,69% 39%,100% 50%,69% 61%,85% 85%,61% 69%,50% 100%,39% 69%,15% 85%,31% 61%,0 50%,31% 39%,15% 15%,39% 31%)}
       #celarys-wild-stats-box .cws-cat.special{border:2px solid #1688ff;border-radius:50%}
       #celarys-wild-stats-box .cws-cat.special::after{content:"";position:absolute;inset:2px;border:1px solid #1688ff;border-radius:50%}
-      #celarys-wild-stats-box .cws-num{text-align:center;font-weight:900;font-variant-numeric:tabular-nums}
-      #celarys-wild-stats-box .cws-unknown{color:#888}
-      #celarys-wild-stats-box::-webkit-resizer{background:linear-gradient(135deg,transparent 0 35%,#fff1b8 36% 45%,transparent 46% 55%,#fff1b8 56% 65%,transparent 66%)}
+      #celarys-wild-stats-box .cws-cat.status{transform:rotate(45deg);width:10px;height:10px;flex-basis:10px;margin:0 2px;background:#f08ac7;border-radius:1px}
+      #celarys-wild-stats-box .cws-num{text-align:center;font-weight:900;font-variant-numeric:tabular-nums;color:#f1f4f7}
+      #celarys-wild-stats-box .cws-unknown{color:#738093}
+      #celarys-wild-stats-box::-webkit-resizer{background:linear-gradient(135deg,transparent 0 35%,#8e9bad 36% 43%,transparent 44% 55%,#8e9bad 56% 63%,transparent 64%)}
       @container (min-width:430px){
-        #celarys-wild-stats-box .cws-upper{grid-template-columns:minmax(0,1.55fr) minmax(145px,.75fr);gap:6px;align-items:start}
-        #celarys-wild-stats-box .cws-profile{border-bottom:0;border-right:2px solid var(--line);padding:0 6px 0 0}
-        #celarys-wild-stats-box .cws-stats{align-content:start;padding:2px 8px}
-        #celarys-wild-stats-box .cws-stats>div{align-items:center}
-        #celarys-wild-stats-box .cws-moves-title,#celarys-wild-stats-box .cws-move{grid-template-columns:minmax(0,1fr) minmax(42px,.16fr) minmax(46px,.18fr) minmax(46px,.18fr);gap:4px}
+        #celarys-wild-stats-box .cws-upper{grid-template-columns:minmax(0,1.65fr) minmax(135px,.62fr);gap:6px;align-items:stretch}
+        #celarys-wild-stats-box .cws-stats{grid-template-columns:1fr}
+        #celarys-wild-stats-box .cws-stats>div{padding:4px 6px}
+        #celarys-wild-stats-box .cws-moves-title,#celarys-wild-stats-box .cws-move{grid-template-columns:minmax(0,1fr) minmax(42px,.15fr) minmax(46px,.17fr) minmax(46px,.17fr)}
       }
       @container (max-width:315px){
-        #celarys-wild-stats-box .cws-topbar{grid-template-columns:30px minmax(0,1fr) auto;gap:6px;padding:5px 7px}
-        #celarys-wild-stats-box .cws-lens{width:26px;height:26px}
-        #celarys-wild-stats-box .cws-profile{grid-template-columns:60px minmax(0,1fr);gap:6px}
-        #celarys-wild-stats-box .cws-sprite{min-height:60px}
+        #celarys-wild-stats-box .cws-topbar{padding:6px 7px}
+        #celarys-wild-stats-box .cws-lens{width:22px;height:22px;flex-basis:22px}
+        #celarys-wild-stats-box .cws-profile{grid-template-columns:66px minmax(0,1fr);gap:5px;padding:5px}
+        #celarys-wild-stats-box .cws-sprite{width:62px;height:62px}
         #celarys-wild-stats-box .cws-sprite-sheet{width:54px;height:54px}
         #celarys-wild-stats-box .cws-body{padding:5px}
-        #celarys-wild-stats-box .cws-stats{padding:2px 5px}
+        #celarys-wild-stats-box .cws-stats>div{padding:4px}
         #celarys-wild-stats-box .cws-moves-title,#celarys-wild-stats-box .cws-move{grid-template-columns:minmax(0,1fr) 30px 34px 34px;gap:3px}
       }
       @container (max-width:270px){
-        #celarys-wild-stats-box .cws-topbar{grid-template-columns:minmax(0,1fr) auto}
-        #celarys-wild-stats-box .cws-lens{display:none}
+        #celarys-wild-stats-box .cws-title span,#celarys-wild-stats-box .cws-leds{display:none}
         #celarys-wild-stats-box .cws-profile{grid-template-columns:1fr}
-        #celarys-wild-stats-box .cws-profile>div:first-child{display:flex!important;align-items:center;gap:5px}
-        #celarys-wild-stats-box .cws-sprite{min-height:48px;width:50px;flex:0 0 50px}
-        #celarys-wild-stats-box .cws-sprite-sheet{width:46px;height:46px}
-        #celarys-wild-stats-box .cws-types{margin:0}
+        #celarys-wild-stats-box .cws-visual{justify-content:flex-start}
+        #celarys-wild-stats-box .cws-sprite{width:54px;height:54px}
+        #celarys-wild-stats-box .cws-sprite-sheet{width:48px;height:48px}
         #celarys-wild-stats-box .cws-moves-title,#celarys-wild-stats-box .cws-move{grid-template-columns:minmax(0,1fr) 27px 30px 30px;gap:2px;padding-left:3px;padding-right:3px}
       }
-      @container (max-width:230px){
-        #celarys-wild-stats-box .cws-leds{display:none}
-        #celarys-wild-stats-box .cws-topbar{grid-template-columns:1fr;padding:5px 6px}
-        #celarys-wild-stats-box .cws-profile>div:first-child{display:block!important}
-        #celarys-wild-stats-box .cws-sprite{display:none}
+      @container (max-width:240px){
+        #celarys-wild-stats-box .cws-lens{display:none}
+        #celarys-wild-stats-box .cws-visual{display:none}
+        #celarys-wild-stats-box .cws-profile{display:block}
+        #celarys-wild-stats-box .cws-stats{grid-template-columns:1fr}
         #celarys-wild-stats-box .cws-cat{display:none}
         #celarys-wild-stats-box .cws-move-name{gap:0}
         #celarys-wild-stats-box .cws-moves-title,#celarys-wild-stats-box .cws-move{grid-template-columns:minmax(0,1fr) 25px 28px 28px}
@@ -731,7 +709,7 @@
     const box = document.getElementById("celarys-wild-stats-box");
     if (!box || box.style.display === "none") return;
     requestAnimationFrame(() => {
-      box.style.width = `${Math.min(340, Math.max(140, innerWidth - 20))}px`;
+      box.style.width = `${Math.min(360, Math.max(140, innerWidth - 20))}px`;
       box.style.height = "auto";
       requestAnimationFrame(() => {
         const available = Math.max(180, innerHeight - 16);
@@ -809,8 +787,10 @@
     for (const t of Array.isArray(types) ? types : []) {
       if (!t) continue;
       const el = document.createElement("span");
+      const type = String(t).toUpperCase();
       el.className = "cws-type";
-      el.textContent = String(t).toUpperCase();
+      el.textContent = type;
+      el.style.setProperty("--type-color", TYPE_COLORS[type] || "#7f8a98");
       host.appendChild(el);
     }
   };
@@ -830,8 +810,7 @@
 
     set("cws-name", `${data.enemy.name} · Lv.${stats.level}`);
     set("cws-battle-kind", data.isWild ? "WILD" : "TRAINER");
-    set("cws-hpline", `HP ${stats.hp} / ${stats.hpMax}`);
-    set("cws-ability", getStableAbility(data));
+    set("cws-hpline", `${stats.hp} / ${stats.hpMax}`);
     set("cws-hp", stats.hpMax);
     set("cws-atk", stats.atk);
     set("cws-def", stats.def);
@@ -839,6 +818,14 @@
     set("cws-spd", stats.spd);
     set("cws-spe", stats.spe);
     set("cws-bst", (data.enemy.bst && data.enemy.bst > 0) ? data.enemy.bst : (BST_DB[data.enemy.speciesId] ?? "—"));
+    const hpFill = document.getElementById("cws-hpfill");
+    if (hpFill) {
+      const ratio = stats.hpMax > 0 ? Math.max(0, Math.min(1, stats.hp / stats.hpMax)) : 0;
+      hpFill.style.width = `${Math.round(ratio * 1000) / 10}%`;
+      hpFill.style.background = ratio <= 0.2 ? "#ef5f5f" : ratio <= 0.5 ? "#e4c64d" : "#41df78";
+    }
+    const moveCount = document.getElementById("cws-move-count");
+    if (moveCount) moveCount.textContent = `MOVES ${stats.moves.filter(move => move.id).length}/4`;
     renderTypes(data.enemy.types);
     updateSprite(data.enemy.speciesId);
 
@@ -854,6 +841,7 @@
         const accuracy = move.accuracy == null || move.accuracy === 0 ? "—" : move.accuracy;
 
         const moveColor = TYPE_COLORS[String(move.type || "").toUpperCase()] || "#f2f2ed";
+        row.style.setProperty("--move-color", moveColor);
         row.innerHTML = `
           <div class="cws-move-name">
             <span class="cws-cat ${cat}"></span>
@@ -974,17 +962,37 @@
     const level = Number(data?.enemy?.level) || 0;
 
     if (!data?.isWild) {
-      const slot0 = partyStart;
-      if (
-        slot0 >= 0 &&
-        slot0 + PARTY_SIZE <= u8.length &&
-        u8[slot0 + 84] === level
-      ) return slot0;
+      const candidates = [];
 
-      for (let slot = 1; slot < PARTY_SLOTS; slot++) {
+      for (let slot = 0; slot < PARTY_SLOTS; slot++) {
         const base = partyStart + slot * PARTY_SIZE;
         if (base < 0 || base + PARTY_SIZE > u8.length) continue;
-        if (u8[base + 84] === level) return base;
+
+        const ramSpecies = decodeSpecies(base, u8);
+        const normalizedSpecies = ramSpecies & 0x7ff;
+        const slotLevel = u8[base + 84];
+        const hp = read16(new Uint16Array(u8.buffer), base + 86);
+
+        candidates.push({
+          base,
+          speciesMatch: species > 0 && (ramSpecies === species || normalizedSpecies === species),
+          levelMatch: slotLevel === level,
+          alive: hp > 0
+        });
+      }
+
+      const best =
+        candidates.find(x => x.speciesMatch && x.levelMatch && x.alive) ??
+        candidates.find(x => x.speciesMatch && x.levelMatch) ??
+        candidates.find(x => x.speciesMatch && x.alive) ??
+        candidates.find(x => x.speciesMatch) ??
+        candidates.find(x => x.levelMatch && x.alive) ??
+        candidates.find(x => x.levelMatch) ??
+        null;
+
+      if (best) {
+        window.__startabDexEnemyBase = best.base;
+        return best.base;
       }
 
       return null;
@@ -995,6 +1003,7 @@
       if (base < 0 || base + PARTY_SIZE > u8.length) continue;
       if (u8[base + 84] !== level) continue;
       if (species > 0 && decodeSpecies(base, u8) !== species) continue;
+      window.__startabDexEnemyBase = base;
       return base;
     }
 
@@ -1003,7 +1012,10 @@
       slot0 >= 0 &&
       slot0 + PARTY_SIZE <= u8.length &&
       u8[slot0 + 84] === level
-    ) return slot0;
+    ) {
+      window.__startabDexEnemyBase = slot0;
+      return slot0;
+    }
 
     return null;
   };
@@ -1101,10 +1113,6 @@
       if (!data.inBattle || !data.enemy?.name) {
         if (lastBattleState) lastEncounterId = null;
         lastBattleState = false;
-        abilityEncounterKey = "";
-        abilityPending = "";
-        abilityPendingCount = 0;
-        abilityDisplay = "…";
         showActiveBadge();
         return;
       }
@@ -1147,7 +1155,7 @@
     ensureOverlay();
     showActiveBadge();
     window.__startabDexInterval = setInterval(tick, POLL_MS);
-    console.log("[StartAB Dex] v0.7.5", {path: location.pathname, season: getSeasonSlug()});
+    console.log(`[StartAB Dex] v${BUILD_ID}`, {path: location.pathname, season: getSeasonSlug()});
   };
 
   const maybeStart = () => {

@@ -2,18 +2,18 @@
 
 Estensione Chrome quality of life per StartAB.
 
-Rimane minimizzata durante il gioco e si apre automaticamente quando appare un Pokémon selvatico.
+Rimane minimizzata durante il gioco e si apre automaticamente quando appare un Pokémon avversario, sia selvatico sia appartenente a un allenatore.
 
 ![StartAB Dex](docs/img.png)
 
 ## Funzionalità
 
-- Statistiche e BST del Pokémon avversario
-- Tipi e abilità
+- Statistiche e BST del Pokémon avversario, selvatico o di un allenatore
+- Tipi
 - Moveset completo con PP, Potenza e Precisione
 - Categoria Fisica / Speciale / Stato
 - Colore delle mosse in base al tipo
-- Interfaccia Pokédex trascinabile e ridimensionabile
+- Interfaccia Pokédex ridisegnata in stile flat/retro, trascinabile e completamente responsive
 
 ## Installazione
 
@@ -23,4 +23,5 @@ Rimane minimizzata durante il gioco e si apre automaticamente quando appare un P
 4. Seleziona la cartella dell'estensione
 5. Apri l'emulatore di StartAB
 
+## Compatibilità
 Progetto non ufficiale della community. Non affiliato con StartAB o Pokémon.
